@@ -7,8 +7,8 @@ import List from "../../components/List/List";
 
 const TodoList = () => {
     const [isShow, setIsShow] = useState(false);
-    const newTitleRef = useRef(''); // Changed to useRef
-    const [search, setSearch] = useState('');
+    const newTitleRef = useRef(''); // Use useRef for newTitle
+    const searchRef = useRef(''); // Use useRef for search
     const [list, setList] = useState([
         { id: 1, title: 'coding', completed: false },
         { id: 2, title: 'eat', completed: false },
@@ -24,7 +24,7 @@ const TodoList = () => {
     
     const handleAdd = () => {
         setList(prevList => [...prevList, { id: prevList.length + 1, title: newTitleRef.current.value, completed: false }]);
-        newTitleRef.current.value = ''; // Clear the input
+        newTitleRef.current.value = ''; // Clear the input after adding
         handleShow();
     };
 
@@ -39,22 +39,27 @@ const TodoList = () => {
     };
 
     const searchs = () => {
-        return list.filter(item => item.title.toLowerCase().includes(search.toLowerCase()));
+        return list.filter(item => item.title.toLowerCase().includes(searchRef.current.value.toLowerCase())); // Use searchRef.current.value
     };
     const handleSearchs = searchs();
 
     const handleSearch = (event) => {
-        setSearch(event.target.value);
+        searchRef.current.value = event.target.value; // Update searchRef.current.value
     };
 
     return (
         <div className={classes.wrapper}>
             <Button onClick={handleShow}>Добавить</Button>
-            <Input placeholder={'search...'} onChange={handleSearch} value={search} name={'search'} />
+            <Input
+                placeholder={'search...'}
+                onChange={handleSearch} // Updated to use handleSearch
+                ref={searchRef} // Bind ref to Input for search
+                name={'search'}
+            />
             {isShow && (
                 <Modal handleShow={handleShow}>
-                    <p>{newTitleRef.current.value}</p>
-                    <Input placeholder={'Добавить'} ref={newTitleRef} name={'add'} /> {/* Updated to use ref */}
+                    <p>{newTitleRef.current.value}</p> // Display value from newTitleRef
+                    <Input placeholder={'Добавить'} ref={newTitleRef} name={'add'} /> // Bind ref to Input for newTitle
                     <Button onClick={handleAdd}>Добавить</Button>
                     <button onClick={handleShow}>Close</button>
                 </Modal>
