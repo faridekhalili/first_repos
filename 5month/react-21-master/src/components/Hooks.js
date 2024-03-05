@@ -5,7 +5,7 @@ const Hooks = memo(({ logSm }) => {
 
     Hooks.displayName = 'HOOKS EEEE'
 
-    const [ state, setState ] = useState('')
+    const stateRef = useRef('')
 
     const inputRef = useRef(null)
 
@@ -21,7 +21,7 @@ const Hooks = memo(({ logSm }) => {
     return ( 
         <div>
             <Modal/>
-            <input value={state} onChange={(e) => setState(e.target.value)}/>
+            <input ref={stateRef} onChange={(e) => stateRef.current = e.target.value}/>
             <button onClick={() => console.log(inputRef)}>{memoConst}</button>
         </div>
     );
