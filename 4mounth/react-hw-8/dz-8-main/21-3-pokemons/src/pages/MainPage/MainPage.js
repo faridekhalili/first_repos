@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import _ from 'lodash';
+import React, { useEffect, useState, useCallback } from "react";
 import {Button} from '@mui/material'
 import {fetchPokemonsS, fetchPokemons} from '../../api/fetchPokemons';
 import Pagination from '../../components/Pagination/Pagination'
@@ -30,13 +31,21 @@ const handleChangePage = (type) => {
   }
 }
 
-  const sortVes = () => {
-    fetchPokemonsS(10,20, 'weight').then(s => setPokemonList(s))
-  }
+const sortVes = useCallback(() => {
+  fetchPokemonsS(10, 20, 'weight').then(s => {
+    if (!_.isEqual(s, pokemonList)) {
+      setPokemonList(s);
+    }
+  })  
+}, [pokemonList]);
 
-  const sortAttach = () => {
-    fetchPokemonsS(10,20,'attach').then(a => setPokemonList(a))
-  }
+  const sortAttach = useCallback(() => {
+    fetchPokemonsS(10, 20, 'attach').then(s => {
+      if (!_.isEqual(s, pokemonList)) {
+        setPokemonList(s);
+      }
+    })
+  }, [pokemonList]);
 
 
   return (
